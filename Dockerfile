@@ -1,6 +1,6 @@
 # ---- Giai đoạn 1: Build ----
 # Dùng image Node.js 18
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 # Đặt thư mục làm việc trong container
 WORKDIR /usr/src/app
@@ -19,7 +19,7 @@ RUN npm run build
 
 # ---- Giai đoạn 2: Production ----
 # Dùng một image gọn nhẹ hơn
-FROM node:18-alpine
+FROM node:22-alpine
 
 # Chỉ cài đặt dependencies cho production (nhẹ hơn)
 WORKDIR /usr/src/app
