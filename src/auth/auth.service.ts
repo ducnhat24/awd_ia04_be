@@ -21,8 +21,15 @@ export class AuthService {
      */
     async login(loginDto: any) {
         // 1. Tìm user trong database
+        if (!loginDto.email || !loginDto.password) {
+            throw new UnauthorizedException('Email và mật khẩu là bắt buộc');
+        }
+
         const user = await this.userService.validateUser(loginDto.email, loginDto.password);
 
+        if (!user) {
+            throw new UnauthorizedException('Email hoặc mật khẩu không đúng');
+        }
 
         // 2. Tạo payload (nội dung) cho 2 loại token
         // Access token payload (chứa thông tin user)
@@ -68,6 +75,11 @@ export class AuthService {
 
         // 2. Lấy thông tin user đầy đủ (giả lập)
         // Chúng ta cần thông tin đầy đủ để tạo Access Token "rich payload"
+        if (!userPayload.userId) {
+            throw new UnauthorizedException('Payload không hợp lệ');
+        }
+
+
         const user = await this.usersRepository.findOne({ where: { id: userPayload.userId } });
         if (!user) {
             throw new UnauthorizedException('User không tồn tại');
